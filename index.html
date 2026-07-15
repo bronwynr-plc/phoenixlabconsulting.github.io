@@ -111,6 +111,7 @@ footer{padding:2rem 4rem;display:flex;justify-content:space-between;align-items:
     <li><a href="#about">About</a></li>
     <li><a href="#services">Services</a></li>
     <li><a href="#nysdoh">NYSDOH System</a></li>
+    <li><a href="#finder-tool">Control Finder</a></li>
     <li><a href="#testimonials">Testimonials</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
@@ -204,7 +205,56 @@ footer{padding:2rem 4rem;display:flex;justify-content:space-between;align-items:
     <a class="btn-light" href="https://www.cognitoforms.com/PhoenixLaboratoryConsulting/NYSDOHComplianceSystemClientIntake" target="_blank">Request a Quote &rarr;</a>
   </div>
 </section>
-
+  
+<section id="finder-tool" class="pcf-section">
+  <style>
+  .pcf-section{--pcf-ink:#1a1a1a;--pcf-mut:#5f6b6b;--pcf-rust:#c0390e;--pcf-line:#e2e2e2;--pcf-bg:#fafafa;
+    padding:72px 22px;background:#fff;font-family:'DM Sans',-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--pcf-ink)}
+  .pcf-wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.25fr .85fr;gap:48px;align-items:center}
+  .pcf-eyebrow{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--pcf-rust);margin:0 0 14px}
+  .pcf-h2{font-size:34px;line-height:1.15;font-weight:700;margin:0 0 16px;letter-spacing:-.01em}
+  .pcf-lead{font-size:16.5px;line-height:1.6;color:var(--pcf-mut);margin:0 0 22px;max-width:560px}
+  .pcf-list{list-style:none;padding:0;margin:0 0 28px;display:grid;gap:11px}
+  .pcf-list li{position:relative;padding-left:30px;font-size:15px;line-height:1.5}
+  .pcf-list li::before{content:"";position:absolute;left:0;top:3px;width:18px;height:18px;border-radius:50%;
+    background:var(--pcf-rust);
+    -webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='white' d='M9 16.2l-3.5-3.5L4 14.2 9 19.2 20 8.2l-1.5-1.5z'/></svg>") center/13px no-repeat;
+    mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='white' d='M9 16.2l-3.5-3.5L4 14.2 9 19.2 20 8.2l-1.5-1.5z'/></svg>") center/13px no-repeat}
+  .pcf-cta{display:inline-block;background:var(--pcf-rust);color:#fff;text-decoration:none;font-weight:700;font-size:15px;
+    padding:13px 26px;border-radius:9px}
+  .pcf-cta:hover{background:#a83208}
+  .pcf-fine{font-size:13px;color:var(--pcf-mut);margin:14px 0 0}
+  .pcf-panel{background:var(--pcf-bg);border:1px solid var(--pcf-line);border-radius:14px;padding:28px}
+  .pcf-panel h3{margin:0 0 18px;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--pcf-mut)}
+  .pcf-stat{display:flex;align-items:baseline;gap:12px;padding:14px 0;border-bottom:1px solid var(--pcf-line)}
+  .pcf-stat:last-child{border-bottom:none}
+  .pcf-stat b{font-size:30px;font-weight:700;color:var(--pcf-ink);min-width:96px}
+  .pcf-stat span{font-size:14px;color:var(--pcf-mut)}
+  @media(max-width:820px){.pcf-wrap{grid-template-columns:1fr;gap:32px}.pcf-h2{font-size:28px}}
+  </style>
+  <div class="pcf-wrap">
+    <div>
+      <p class="pcf-eyebrow">New &middot; Free tool</p>
+      <h2 class="pcf-h2">PGx Control Finder</h2>
+      <p class="pcf-lead">Choosing Coriell reference controls for a pharmacogenetic validation usually means cross-referencing panel content, GeT-RM diplotypes, and 1000&nbsp;Genomes carriers by hand. This tool does it in minutes: map your platform&rsquo;s targets to the reference samples that carry them &mdash; including CYP2D6 copy-number and hybrid controls &mdash; and export an audit-ready control set.</p>
+      <ul class="pcf-list">
+        <li>Covers ThermoFisher, Agena VeriDose (+CNV), Illumina GDA, and AMP/CAP Tier&nbsp;1/2</li>
+        <li>A set-cover optimizer packs your targets into the fewest Coriell samples</li>
+        <li>CYP2D6 copy number: distinct deletion, duplication, and hybrid controls</li>
+        <li>Exports a Coriell shopping list and expected-results table (Excel)</li>
+      </ul>
+      <a class="pcf-cta" href="/finder">Try the free warfarin preview &rarr;</a>
+      <p class="pcf-fine">Free preview covers CYP2C9 and VKORC1 &mdash; no sign-up. Full platform exports available.</p>
+    </div>
+    <div class="pcf-panel">
+      <h3>What&rsquo;s inside</h3>
+      <div class="pcf-stat"><b>143</b><span>validation targets across pharmacogenes</span></div>
+      <div class="pcf-stat"><b>31</b><span>genes, including CYP2D6 CNV &amp; hybrids</span></div>
+      <div class="pcf-stat"><b>2,700+</b><span>Coriell reference samples mapped</span></div>
+    </div>
+  </div>
+</section>
+  
 <section class="testimonials" id="testimonials">
   <p class="section-label">Testimonials</p>
   <h2 class="section-title">What clients say</h2>
