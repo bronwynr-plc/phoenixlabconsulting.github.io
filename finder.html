@@ -524,7 +524,7 @@ function recalcROI() {
   const out = $('roiOut'); if (!out) return;
   out.innerHTML = 'This panel: <b>' + n + '</b> Coriell samples &asymp; <b>' + usd(dna) + '</b> in control DNA + <b>' + hLo + '&ndash;' + hHi + ' hrs</b> analyst time (&asymp; ' + usd(labLo) + '&ndash;' + usd(labHi) + ').' +
     '<div style="margin-top:5px">Do-it-yourself: <b>' + usd(totLo) + '&ndash;' + usd(totHi) + '</b> &nbsp;&middot;&nbsp; This export: <b>' + usd(Math.round(PER_PANEL)) + '</b> (1 of ' + PACK_TOKENS + ' tokens) <span style="color:#0a6e57;font-weight:700">saves ' + usd(Math.max(0, Math.round(totLo - PER_PANEL))) + '&ndash;' + usd(Math.max(0, Math.round(totHi - PER_PANEL))) + '</span></div>' +
-    '<div class="small" style="margin-top:4px">' + PACK_TOKENS + ' tokens / ' + usd(PACK_PRICE) + ' &middot; ' + usd(PER_PANEL) + ' per panel &middot; never expire.</div>';
+    '<div class="small" style="margin-top:4px">' + PACK_TOKENS + ' tokens / ' + usd(PACK_PRICE) + ' &middot; never expire.</div>';
 }
 
 /* ---------- buy ---------- */
