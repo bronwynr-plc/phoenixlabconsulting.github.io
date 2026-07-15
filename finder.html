@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>PGx Validation Controls Finder — Phoenix Lab Consulting</title>
+<meta name="description" content="Find Coriell reference controls for pharmacogenetic assay validation. Free warfarin preview; buy tokens to export full platform panels (ThermoFisher, Agena, Illumina, AMP/CAP Tier 1/2)."/>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+:root{--teal:#0d6e68;--teal-d:#094f4a;--accent:#c0390e;--ink:#1a1a1a;--mut:#5f6b6b;--bg:#f4f8f7;--line:#d9e5e4;
+--hom:#0072B2;--het:#E69F00;--none:#767676;--card:#fff;--amp1:#6A1B9A;}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.55 'DM Sans',-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:var(--teal-d)}
+header{background:linear-gradient(100deg,var(--teal-d),var(--teal));color:#fff;padding:16px 22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+header h1{font-size:20px;margin:0;font-weight:700}
+header .sub{font-size:12.5px;opacity:.9}
+.cta{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:10px 18px;font-weight:700;font-size:14px;cursor:pointer;text-decoration:none;display:inline-block}
+.cta:hover{background:#a83208}
+.cta:disabled{background:#c9b3ab;cursor:not-allowed}
+.cta.lg{padding:13px 26px;font-size:15px}
+.ghost{background:#fff;color:var(--teal-d);border:1px solid var(--teal)}
+.ghost:hover{background:#eef7f6}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px 60px}
+.hero{padding:34px 0 20px;display:flex;gap:28px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.hero h2{font-size:27px;margin:0 0 8px;font-weight:700;letter-spacing:-.2px}
+.hero p{font-size:16px;color:var(--mut);margin:0 0 16px;max-width:560px}
+.stats{display:flex;gap:26px;flex-wrap:wrap;margin-top:6px}
+.stat b{display:block;font-size:24px;color:var(--teal-d)}
+.stat span{font-size:12px;color:var(--mut)}
+.section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin:16px 0;box-shadow:0 1px 3px rgba(0,0,0,.03)}
+.section h3{margin:0 0 4px;font-size:18px}
+.section .lead{color:var(--mut);font-size:13.5px;margin:0 0 14px}
+.badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:11px;background:#e3f0ef;color:var(--teal-d);text-transform:uppercase;letter-spacing:.4px}
+.badge.free{background:#e3f0ef;color:var(--teal-d)}
+.badge.lock{background:#fdeee7;color:var(--accent)}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:top}
+th{color:var(--teal-d);font-weight:650;font-size:12px;text-transform:uppercase;letter-spacing:.3px}
+.gene{font-weight:700}
+.pill{display:inline-block;font-size:10px;font-weight:700;padding:1px 7px;border-radius:10px;color:#fff}
+.p-both{background:var(--hom)}.p-het{background:var(--het)}.p-none{background:var(--none)}
+.z-hom{color:var(--hom);font-weight:700}.z-het{color:var(--het);font-weight:700}
+.small{font-size:11.5px;color:var(--mut)}
+.chip{display:inline-block;background:#eef4f4;border:1px solid var(--line);border-radius:14px;padding:3px 9px;font-size:11px;margin:2px}
+.chip.cur{border-color:var(--teal);background:#e3f0ef}
+.note{font-size:11.5px;color:var(--mut);font-style:italic}
+.banner{font-size:12.5px;border-radius:8px;padding:9px 12px;margin:0 0 12px}
+.banner.warn{background:#fbf1e6;border:1px solid #e6c98f;color:#7a4a12}
+.banner.info{background:#eef6f5;border:1px solid var(--line);color:var(--teal-d)}
+.banner.err{background:#fdecec;border:1px solid #e6a3a3;color:#8b1a1a}
+.banner.ok{background:#e9f6ee;border:1px solid #9fd3af;color:#0a6e57}
+/* browse controls */
+.tbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 10px}
+select,input[type=text]{padding:9px 11px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#fff;max-width:100%}
+.scrollbox{max-height:420px;overflow:auto;border:1px solid var(--line);border-radius:8px}
+.scrollbox thead th{position:sticky;top:0;background:#f2f8f7;z-index:1}
+/* CNV showcase */
+.cnvcards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.cnvcard{border:1px solid var(--line);border-left:3px solid var(--teal);border-radius:8px;padding:11px 13px;background:#fafcfc}
+.cnvcard .st{font-weight:700;color:var(--teal-d)}
+.cnvcard .id{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;margin:4px 0}
+@media(max-width:640px){.cnvcards{grid-template-columns:1fr}}
+/* preset + gene picker */
+.pickgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:6px}
+.pcard{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#fafcfc;cursor:pointer;position:relative;transition:border-color .12s,box-shadow .12s}
+.pcard:hover{border-color:var(--accent)}
+.pcard.sel{border-color:var(--teal);box-shadow:0 0 0 2px rgba(13,110,104,.18);background:#f2f8f7}
+.pcard .g{font-weight:700;font-size:14px}
+.pcard .c{font-size:11.5px;color:var(--mut);margin-top:3px}
+.pcard .cnv{display:inline-block;margin-top:6px;font-size:10px;font-weight:700;color:var(--teal-d);background:#e3f0ef;border-radius:9px;padding:1px 7px}
+.pcard .tk{position:absolute;top:10px;right:11px;font-size:10px;font-weight:700;color:var(--accent)}
+.lockgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:6px}
+.lockcell{border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:#fafcfc;cursor:pointer;position:relative}
+.lockcell:hover{border-color:var(--accent)}
+.lockcell.sel{border-color:var(--teal);box-shadow:0 0 0 2px rgba(13,110,104,.18);background:#f2f8f7}
+.lockcell .g{font-weight:700}
+.lockcell .c{font-size:11px;color:var(--mut)}
+.lockcell .lk{position:absolute;top:8px;right:9px;opacity:.5}
+.keyrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.keyrow input[type=text]{flex:1;min-width:220px}
+.balpill{font-weight:700;color:var(--teal-d);background:#e3f0ef;border-radius:12px;padding:4px 12px;font-size:13px}
+.unlock{background:linear-gradient(100deg,#fff,#fff7f3);border:1px solid #f0d2c4;border-radius:12px;padding:22px;text-align:center;margin:20px 0}
+.unlock h3{margin:0 0 6px;font-size:20px}
+.unlock p{color:var(--mut);margin:0 0 10px}
+footer{text-align:center;color:var(--mut);font-size:12px;padding:24px}
+.hidden{display:none}
+@media(max-width:640px){.hero h2{font-size:22px}}
+</style>
+<!-- Google tag (gtag.js) — same property as phoenixlabconsulting.com -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z6ZYQFCWT2"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Z6ZYQFCWT2');</script>
+</head>
+<body>
+<header>
+  <svg width="30" height="34" viewBox="0 0 24 28" aria-label="Phoenix Lab Consulting"><path fill="#e08a1e" d="M12 0c1.6 3.1-.6 5-1.9 7.2-1 1.7-.9 3.6.9 4.6.2-1.7 1-2.8 2.2-3.4-.3 1.8.4 2.9 1.6 4.2 1.8 1.9 2.7 3.8 2.7 6C19.5 24 16.3 27 12 27S4.5 24 4.5 20c0-2.6 1.3-4.6 3-6.4-.1 1.2.3 2.1 1.1 2.7-.7-2.4.2-4.2 1.2-6C11.3 7.6 13 5 12 0z"/></svg>
+  <div><h1>PGx Validation Controls Finder</h1>
+  <div class="sub">Coriell controls for PGx platform validation · Phoenix Lab Consulting</div></div>
+  <a class="cta ghost" style="margin-left:auto" href="mailto:bronwynr@phoenixlabconsulting.com?subject=PGx%20Validation%20Controls%20Finder%20%E2%80%94%20Is%20my%20platform%20missing%3F&body=Which%20PGx%20platform%20or%20assay%20should%20we%20add%3F%0A%0A">Platform missing? Tell us</a>
+  <a class="cta" href="#buy">Buy tokens</a>
+</header>
+<div class="wrap">
+
+  <div class="hero">
+    <div>
+      <h2>Stop hunting spreadsheets for validation controls.</h2>
+      <p>Browse every PGx target and see how many Coriell controls exist for each. Buy tokens to export a full platform panel — the optimizer packs the fewest samples that cover it, CYP2D6 structural set built in, as a two-tab Excel file.</p>
+      <a class="cta lg" href="#buy">Buy 5 export tokens — $199</a>
+      <a class="cta lg ghost" href="#preview" style="margin-left:8px">Try the free warfarin preview &darr;</a>
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="s-targets">&mdash;</b><span>curated targets</span></div>
+      <div class="stat"><b id="s-genes">&mdash;</b><span>pharmacogenes</span></div>
+      <div class="stat"><b id="s-samples">&mdash;</b><span>ancestry-annotated<br>Coriell samples</span></div>
+    </div>
+  </div>
+
+  <div id="cfgBanner"></div>
+
+  <!-- ============ FREE WARFARIN PREVIEW ============ -->
+  <div class="section" id="preview">
+    <h3>Warfarin preview <span class="badge free">free · no key</span></h3>
+    <p class="lead">A real, working slice — the warfarin panel (<b>CYP2C9 &middot; VKORC1</b>), with the actual Coriell samples the optimizer picks (capped at 10). Same format and values you get in a paid export; buy tokens to unlock the full multi-platform panels.</p>
+    <div id="previewOut"><span class="small">Loading preview&hellip;</span></div>
+  </div>
+
+  <!-- ============ BROWSE ALL TARGETS (counts only) ============ -->
+  <div class="section" id="browse">
+    <h3>Browse every target <span class="badge free">free</span></h3>
+    <p class="lead">Every variant in the database and <b>how many</b> Coriell controls it has (heterozygous / homozygous). The sample IDs themselves come with an export — this view is the map of what's available.</p>
+    <div class="tbar">
+      <label class="small" for="geneFilter">Gene</label>
+      <select id="geneFilter"><option value="">All genes</option></select>
+      <input type="text" id="tSearch" placeholder="Search variant / rsID&hellip;" autocomplete="off"/>
+      <span class="small" id="browseCount"></span>
+    </div>
+    <div class="scrollbox">
+      <table><thead><tr><th>Gene</th><th>Variant</th><th>rsID</th><th>Controls</th><th># Het</th><th># Hom</th><th>AMP</th><th>Panels</th></tr></thead>
+      <tbody id="browseBody"><tr><td colspan="8" class="small">Loading targets&hellip;</td></tr></tbody></table>
+    </div>
+  </div>
+
+  <!-- ============ CYP2D6 CNV SHOWCASE ============ -->
+  <div class="section" id="cnv">
+    <h3>CYP2D6 copy number &amp; hybrids <span class="badge">in every panel</span></h3>
+    <p class="lead">The part free lookup tools skip. When any CYP2D6 target is in your export, the Finder automatically adds three <b>independent</b> controls — a deletion, a duplication, and a hybrid/tandem — each a clean single-state sample so every copy-number readout is unambiguous (the SNV+CNV challenge CAP&nbsp;COM.40350 requires).</p>
+    <div class="cnvcards" id="cnvCards"></div>
+    <p class="small" style="margin-top:11px" id="cnvSpineNote">Structural spine: GeT-RM (Gaedigk et&nbsp;al. 2019), consensus CYP2D6 diplotypes. Maps to ThermoFisher TrueMark (Exon&nbsp;9 + Intron&nbsp;2) and Agena VeriDose CYP2D6 CNV.</p>
+  </div>
+
+  <!-- ============ EXPORT PICKER ============ -->
+  <div class="section" id="export">
+    <h3>Export a panel <span class="badge lock">1 token each</span></h3>
+    <p class="lead">Each token unlocks <b>one bounded export</b> — a platform preset (many genes for one instrument) <b>or</b> a single gene. Buying all five presets covers a complete multi-platform validation. Pick a preset or a gene, paste your key, and export.</p>
+
+    <div style="font-weight:700;margin:6px 0 2px">Platform presets</div>
+    <div id="presetGrid" class="pickgrid"><span class="small">Loading export menu&hellip;</span></div>
+
+    <div style="font-weight:700;margin:16px 0 2px">&hellip; or a single gene <span class="small" style="font-weight:400">(the full database — 1 token per gene)</span></div>
+    <div id="geneGrid" class="lockgrid"><span class="small">Loading genes&hellip;</span></div>
+
+    <div class="keyrow">
+      <input type="text" id="keyIn" placeholder="Have tokens? Paste your license key" autocomplete="off" spellcheck="false"/>
+      <button class="cta ghost" id="checkBtn">Check balance</button>
+      <span id="balOut" class="small"></span>
+    </div>
+
+    <div id="exportMsg" style="margin-top:10px"></div>
+
+    <div style="margin-top:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <button class="cta" id="exportBtn" disabled>Export selected panel (1 token)</button>
+      <span class="small" id="selInfo">Select a preset or gene above, paste your key, then export.</span>
+    </div>
+
+    <div id="panelOut" style="margin-top:14px"></div>
+  </div>
+
+  <!-- ============ BUY ============ -->
+  <div class="unlock" id="buy">
+    <h3>Buy export tokens</h3>
+    <p>Five panel exports for your lab — every platform preset or à-la-carte genes, the optimizer, ancestry-aware selection, and two-tab Excel export.</p>
+    <p class="lead" style="font-weight:700;color:var(--accent);margin:8px 0 2px">5 export tokens &mdash; $199 <span style="font-weight:500;color:var(--ink)">($39.80 per panel · tokens never expire)</span></p>
+    <p class="small" style="margin:2px 0 12px">Launch promo: <b>$149 for the first 5 labs</b> — applied automatically at checkout.</p>
+    <button class="cta lg" id="buyBtn">Buy 5 tokens &rarr;</button>
+    <div class="note" style="margin-top:12px">Secure checkout &amp; tax handled by Lemon Squeezy (merchant of record). Your license key is emailed to you and shown on the receipt — paste it above to export. Research use only. Genotypes from 1000&nbsp;Genomes &amp; GeT-RM/Coriell curation; verify critical controls against primary sources before validation.</div>
+  </div>
+</div>
+<footer>&copy; Phoenix Lab Consulting &middot; PGx Validation Controls Finder &middot; For Research Use Only</footer>
+
+<script>
+/* =========================================================================
+   CONFIG — set this ONE value at go-live.
+   After you deploy the Worker (name "pgx-controls-finder"), Cloudflare gives it
+   a URL like https://pgx-controls-finder.<your-subdomain>.workers.dev
+   Paste that URL (no trailing slash) below, or a custom route if you add one.
+   ========================================================================= */
+const WORKER = "https://pgx-controls-finder.phoenixlabconsulting.workers.dev";
+/* ------------------------------------------------------------------------- */
+
+const PACK_PRICE = 199, PACK_TOKENS = 5, PER_PANEL = 199 / 5; // $39.80
+const configured = /^https?:\/\//.test(WORKER);
+const api = p => WORKER.replace(/\/+$/, "") + p;
+
+// Fixed CYP2D6 CNV teaser (3 curated example controls — already public in the demo).
+// These are illustrative single-state picks; no other sample IDs ship in this page.
+const CNV_TEASER = [
+  { state: "Deletion", id: "HG00156", dip: "*5/*5", read: "CN loss on Exon 9 + Intron 2" },
+  { state: "Duplication", id: "HG00421", dip: "*2/*10x2", read: "CN gain (3 copies) on both assays" },
+  { state: "Hybrid / tandem", id: "HG00463", dip: "*36+*10/*36+*10", read: "Exon 9 vs Intron 2 discordance" },
+];
+
+// module state
+let CATALOG = null, TARGETS = [], selUnit = null, licenseKey = "", balance = null;
+
+const $ = id => document.getElementById(id);
+const usd = x => '$' + Number(x).toLocaleString('en-US');
+const esc = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const covPill = c => c === 'both' ? '<span class="pill p-both">HET+HOM</span>' : c === 'het' ? '<span class="pill p-het">HET ONLY</span>' : '<span class="pill p-none">NONE</span>';
+
+async function getJSON(path, opts) {
+  const r = await fetch(api(path), opts);
+  const j = await r.json().catch(() => ({}));
+  return { status: r.status, ok: r.ok, j };
+}
+
+/* ---------- boot ---------- */
+function boot() {
+  renderCnvCards(); // static teaser works with or without the Worker
+  if (!configured) {
+    $('cfgBanner').innerHTML = '<div class="banner warn">This finder isn’t connected to its data service yet. Set the <code>WORKER</code> URL in this page after deploying the Worker. Live preview, browse, balance, and export are disabled until then.</div>';
+    $('s-targets').textContent = '143'; $('s-genes').textContent = '31'; $('s-samples').textContent = (2706).toLocaleString();
+    $('previewOut').innerHTML = '<span class="small">Preview loads once the Worker URL is configured.</span>';
+    $('browseBody').innerHTML = '<tr><td colspan="8" class="small">Browse loads once the Worker URL is configured.</td></tr>';
+    $('presetGrid').innerHTML = '<span class="small">Export menu loads once the Worker URL is configured.</span>';
+    $('geneGrid').innerHTML = '';
+    return;
+  }
+  loadStats(); loadPreview(); loadCatalog(); loadTargets();
+}
+
+/* ---------- hero stats ---------- */
+async function loadStats() {
+  try {
+    const [h, c] = await Promise.all([getJSON('/'), getJSON('/catalog')]);
+    if (h.ok && h.j) {
+      if (h.j.targets != null) $('s-targets').textContent = h.j.targets;
+      if (h.j.samples != null) $('s-samples').textContent = Number(h.j.samples).toLocaleString();
+    }
+    if (c.ok && c.j && c.j.genes) $('s-genes').textContent = c.j.genes.length;
+  } catch (e) {}
+}
+
+/* ---------- free warfarin preview ---------- */
+async function loadPreview() {
+  try {
+    const { ok, j } = await getJSON('/preview');
+    if (!ok || j.error) { $('previewOut').innerHTML = '<div class="banner err">Preview unavailable right now.</div>'; return; }
+    $('previewOut').innerHTML = renderPanel(j, { preview: true });
+  } catch (e) { $('previewOut').innerHTML = '<div class="banner err">Could not reach the preview service.</div>'; }
+}
+
+/* ---------- catalog -> presets + gene grid + cnv spine ---------- */
+async function loadCatalog() {
+  try {
+    const { ok, j } = await getJSON('/catalog');
+    if (!ok || !j.presets) { $('presetGrid').innerHTML = '<div class="banner err">Export menu unavailable right now.</div>'; return; }
+    CATALOG = j;
+    renderPresets(j.presets);
+    renderGeneGrid(j.genes);
+    if (j.cnvSpine) renderCnvSpine(j.cnvSpine);
+  } catch (e) { $('presetGrid').innerHTML = '<div class="banner err">Could not reach the export service.</div>'; }
+}
+
+function renderPresets(presets) {
+  $('presetGrid').innerHTML = presets.map(p =>
+    '<div class="pcard" data-unit="' + esc(p.id) + '">' +
+      '<span class="tk">1 token</span>' +
+      '<div class="g">' + esc(p.name) + '</div>' +
+      '<div class="c">' + p.targets + ' targets</div>' +
+      (p.cnv ? '<span class="cnv">+ CYP2D6 CNV set</span>' : '') +
+    '</div>'
+  ).join('');
+  Array.from($('presetGrid').querySelectorAll('.pcard')).forEach(el =>
+    el.addEventListener('click', () => selectUnit(el.getAttribute('data-unit'), 'preset')));
+}
+
+function renderGeneGrid(genes) {
+  $('geneGrid').innerHTML = genes.map(g =>
+    '<div class="lockcell" data-unit="' + esc(g.id) + '"><span class="lk">🔒</span>' +
+      '<div class="g">' + esc(g.gene) + '</div>' +
+      '<div class="c">' + g.targets + ' target' + (g.targets > 1 ? 's' : '') +
+        (g.withControls != null ? ' · ' + g.withControls + ' with controls' : '') + '</div>' +
+    '</div>'
+  ).join('');
+  Array.from($('geneGrid').querySelectorAll('.lockcell')).forEach(el =>
+    el.addEventListener('click', () => selectUnit(el.getAttribute('data-unit'), 'gene')));
+}
+
+function renderCnvSpine(sp) {
+  $('cnvSpineNote').innerHTML = 'Structural spine: GeT-RM (Gaedigk et&nbsp;al. 2019), consensus CYP2D6 diplotypes — <b>' +
+    sp.del + '</b> deletions &middot; <b>' + sp.dup + '</b> duplications &middot; <b>' + sp.hybrid +
+    '</b> hybrids/tandems. Maps to ThermoFisher TrueMark (Exon&nbsp;9 + Intron&nbsp;2) and Agena VeriDose CYP2D6 CNV.';
+}
+
+function renderCnvCards() {
+  $('cnvCards').innerHTML = CNV_TEASER.map(c =>
+    '<div class="cnvcard"><div class="st">' + esc(c.state) + '</div>' +
+      '<div class="id">' + esc(c.id) + ' &nbsp;<span class="small">' + esc(c.dip) + '</span></div>' +
+      '<div class="small">' + esc(c.read) + '</div></div>'
+  ).join('');
+}
+
+/* ---------- targets -> browse table ---------- */
+async function loadTargets() {
+  try {
+    const { ok, j } = await getJSON('/targets');
+    if (!ok || !j.targets) { $('browseBody').innerHTML = '<tr><td colspan="8" class="banner err">Browse unavailable right now.</td></tr>'; return; }
+    TARGETS = j.targets;
+    // populate gene filter
+    const genes = Array.from(new Set(TARGETS.map(t => t.gene))).sort();
+    $('geneFilter').innerHTML = '<option value="">All genes</option>' + genes.map(g => '<option value="' + esc(g) + '">' + esc(g) + '</option>').join('');
+    renderBrowse();
+  } catch (e) { $('browseBody').innerHTML = '<tr><td colspan="8" class="banner err">Could not reach the browse service.</td></tr>'; }
+}
+
+function renderBrowse() {
+  const g = $('geneFilter').value;
+  const q = ($('tSearch').value || '').trim().toLowerCase();
+  const rows = TARGETS.filter(t =>
+    (!g || t.gene === g) &&
+    (!q || (t.allele + ' ' + t.rsid).toLowerCase().includes(q)));
+  $('browseCount').textContent = rows.length + ' of ' + TARGETS.length + ' targets';
+  if (!rows.length) { $('browseBody').innerHTML = '<tr><td colspan="8" class="small">No targets match.</td></tr>'; return; }
+  $('browseBody').innerHTML = rows.map(t =>
+    '<tr><td class="gene">' + esc(t.gene) + '</td>' +
+    '<td>' + esc(t.allele || '—') + '</td>' +
+    '<td>' + esc(t.rsid) + '</td>' +
+    '<td>' + covPill(t.cov) + '</td>' +
+    '<td>' + (t.n_het || '') + '</td>' +
+    '<td>' + (t.n_hom || '') + '</td>' +
+    '<td>' + (t.amp_tier ? esc(t.amp_tier) : '') + '</td>' +
+    '<td class="small">' + esc(t.sources || '') + '</td></tr>'
+  ).join('');
+}
+
+/* ---------- selection ---------- */
+function selectUnit(unit, kind) {
+  selUnit = unit;
+  Array.from($('presetGrid').querySelectorAll('.pcard')).forEach(el =>
+    el.classList.toggle('sel', el.getAttribute('data-unit') === unit));
+  Array.from($('geneGrid').querySelectorAll('.lockcell')).forEach(el =>
+    el.classList.toggle('sel', el.getAttribute('data-unit') === unit));
+  const label = unit.startsWith('gene:') ? unit.slice(5) + ' (single gene)'
+    : (CATALOG && CATALOG.presets.find(p => p.id === unit) || {}).name || unit;
+  $('selInfo').textContent = 'Selected: ' + label + (licenseKey ? ' — ready to export.' : ' — paste your key to export.');
+  refreshExportBtn();
+}
+function refreshExportBtn() {
+  const ready = !!selUnit && !!licenseKey && balance && (balance.remaining == null || balance.remaining > 0);
+  $('exportBtn').disabled = !ready;
+}
+
+/* ---------- key / balance ---------- */
+async function checkBalance() {
+  const key = $('keyIn').value.trim();
+  if (!key) { $('balOut').innerHTML = '<span class="balpill" style="background:#fdecec;color:#8b1a1a">Paste a key first.</span>'; return; }
+  $('balOut').innerHTML = '<span class="small">Checking&hellip;</span>';
+  if (window.gtag) gtag('event', 'key_check', { event_category: 'tokens' });
+  try {
+    const { ok, j } = await getJSON('/balance?key=' + encodeURIComponent(key));
+    if (!ok || j.error) {
+      licenseKey = ''; balance = null;
+      const map = { license_disabled: 'This license key is disabled.', license_expired: 'This license key has expired.', ls_validate_failed: 'Key not recognized — check for typos.' };
+      $('balOut').innerHTML = '<span class="balpill" style="background:#fdecec;color:#8b1a1a">' + esc(map[j.error] || j.error || 'Invalid key') + '</span>';
+      refreshExportBtn(); return;
+    }
+    licenseKey = key;
+    balance = { limit: j.limit, used: j.used, remaining: j.remaining };
+    renderBalance(); refreshExportBtn();
+    if (selUnit) $('selInfo').textContent = 'Selected — ready to export.';
+  } catch (e) { $('balOut').innerHTML = '<span class="balpill" style="background:#fdecec;color:#8b1a1a">Could not reach the token service.</span>'; }
+}
+function renderBalance() {
+  if (!balance) { $('balOut').textContent = ''; return; }
+  const rem = balance.remaining == null ? '?' : balance.remaining;
+  const lim = balance.limit == null ? PACK_TOKENS : balance.limit;
+  $('balOut').innerHTML = '<span class="balpill">' + rem + ' of ' + lim + ' tokens left</span>';
+}
+
+/* ---------- export ---------- */
+async function doExport() {
+  if (!selUnit) return;
+  $('exportBtn').disabled = true;
+  $('exportMsg').innerHTML = '<div class="banner info">Building your panel&hellip;</div>';
+  if (window.gtag) gtag('event', 'export', { event_category: 'tokens', event_label: selUnit });
+  try {
+    const { ok, status, j } = await getJSON('/export', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key: licenseKey, unit: selUnit })
+    });
+    if (!ok || j.error) {
+      if (j.error === 'out_of_tokens') {
+        balance = { limit: j.limit, used: j.used, remaining: 0 }; renderBalance();
+        $('exportMsg').innerHTML = '<div class="banner warn">Out of tokens. <a href="#buy">Buy 5 more &rarr;</a></div>';
+      } else if (status === 401 || j.error === 'missing_key') {
+        $('exportMsg').innerHTML = '<div class="banner err">Paste and check a valid license key first.</div>';
+      } else {
+        $('exportMsg').innerHTML = '<div class="banner err">Export failed: ' + esc(j.error || ('HTTP ' + status)) + '</div>';
+      }
+      refreshExportBtn(); return;
+    }
+    if (j.token && j.token.remaining != null) { balance = { limit: j.token.limit, used: j.token.used, remaining: j.token.remaining }; renderBalance(); }
+    const freed = j.token && j.token.consumed === false && !j.token.dev;
+    $('exportMsg').innerHTML = '<div class="banner ok">' + esc(j.label) + ' exported' +
+      (freed ? ' (already owned — free re-download, no token spent)' : ' — 1 token spent') + '.</div>';
+    $('panelOut').innerHTML = renderPanel(j, { preview: false }) + roiHTML(j.controls);
+    wireDownload(j); recalcROI();
+  } catch (e) { $('exportMsg').innerHTML = '<div class="banner err">Could not reach the export service.</div>'; }
+  finally { refreshExportBtn(); }
+}
+
+function wireDownload(j) {
+  const btn = $('dlBtn'); if (!btn) return;
+  btn.addEventListener('click', () => {
+    if (!j.xlsxBase64) return;
+    const bin = atob(j.xlsxBase64), len = bin.length, u8 = new Uint8Array(len);
+    for (let i = 0; i < len; i++) u8[i] = bin.charCodeAt(i);
+    const blob = new Blob([u8], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'PGx_' + j.unit.replace(/[^a-z0-9]+/gi, '_') + '.xlsx';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+    if (window.gtag) gtag('event', 'xlsx_download', { event_category: 'tokens', event_label: j.unit });
+  });
+}
+
+/* ---------- shared panel renderer (preview + paid) ---------- */
+function renderPanel(j, o) {
+  const preview = o && o.preview;
+  const sl = j.shoppingList || [], td = j.targetDetails || [];
+  let html = '';
+  if (preview) {
+    html += '<div class="banner info">Preview — capped at ' + (j.sampleCap || 10) + ' controls' +
+      (j.truncated ? ' (full panel has more)' : '') + '. Buy tokens for the full panels.</div>';
+  } else if (j.cnvAssayNote) {
+    html += '<div class="banner info"><b>CYP2D6 CNV assay note:</b> ' + esc(j.cnvAssayNote) + '</div>';
+  }
+  (j.warnings || []).forEach(w => { html += '<div class="banner warn">⚠ ' + esc(w.message) + '</div>'; });
+  html += '<div style="font-weight:700;margin:6px 0 4px"><b>' + (j.controls != null ? j.controls : sl.length) + '</b> Coriell sample' + (sl.length === 1 ? '' : 's') + ' cover this panel:</div>';
+  html += '<div style="overflow-x:auto"><table><thead><tr><th>Sample</th><th>Ancestry</th><th>Sex</th><th>Covers</th></tr></thead><tbody>';
+  sl.forEach(r => {
+    const anc = (r.superpop || '') + (r.pop ? ' / ' + r.pop : '');
+    const covers = (r.covers || []).map(c => esc(c)).join('<br>');
+    html += '<tr><td class="gene">' + esc(r.sample) + (r.curated ? ' <span class="chip cur">GeT-RM</span>' : '') + '</td>' +
+      '<td class="small">' + esc(anc) + '</td><td>' + esc(r.sex || '') + '</td><td class="small">' + covers + '</td></tr>';
+  });
+  html += '</tbody></table></div>';
+  if (!preview && td.length) {
+    html += '<div style="font-weight:700;margin:14px 0 4px">Target coverage (expected results):</div>';
+    html += '<div style="overflow-x:auto"><table><thead><tr><th>Gene</th><th>Allele / rsID</th><th>AMP tier</th><th>CPIC</th><th>Source</th><th># Het</th><th># Hom</th></tr></thead><tbody>';
+    td.forEach(t => {
+      html += '<tr><td class="gene">' + esc(t.gene) + '</td><td>' + esc(t.allele || t.rsid || '') + '</td>' +
+        '<td>' + esc(t.amp_tier || '') + '</td><td class="small">' + esc(t.cpic || '') + '</td>' +
+        '<td class="small">' + esc(t.source || '') + '</td><td>' + esc(t.n_het) + '</td><td>' + esc(t.n_hom) + '</td></tr>';
+    });
+    html += '</tbody></table></div>';
+  }
+  if (!preview && j.xlsxBase64) {
+    html += '<div style="margin-top:12px"><button class="cta" id="dlBtn">⬇ Download Excel (shopping list + expected results)</button></div>';
+  } else if (preview) {
+    html += '<div style="margin-top:12px"><a class="cta" href="#buy">Buy tokens to export full panels &rarr;</a></div>';
+  }
+  return html;
+}
+
+/* ---------- ROI (token framing) ---------- */
+function roiHTML(n) {
+  window.__roiN = n || 0;
+  return '<div id="roiBox" style="margin-top:14px;padding:13px 15px;border:1px solid #d8c48b;background:#fbf7ea;border-radius:8px">' +
+    '<div style="font-weight:700;margin-bottom:6px">What this token saved you</div>' +
+    '<div class="small" style="margin-bottom:7px">Editable &mdash; Coriell DNA <input id="roiCost" type="number" value="145" min="0" style="width:56px" oninput="recalcROI()"> $/sample <span style="color:#6b6b6b">($145 academic / $352 commercial)</span> &middot; analyst <input id="roiRate" type="number" value="100" min="0" style="width:52px" oninput="recalcROI()"> $/hr</div>' +
+    '<div id="roiOut"></div></div>';
+}
+function recalcROI() {
+  const n = window.__roiN || 0;
+  const c = Math.max(0, +(($('roiCost') || {}).value) || 0);
+  const r = Math.max(0, +(($('roiRate') || {}).value) || 0);
+  const dna = n * c, hLo = Math.max(2, Math.round(n * 0.16)), hHi = Math.max(4, Math.round(n * 0.32));
+  const labLo = hLo * r, labHi = hHi * r, totLo = dna + labLo, totHi = dna + labHi;
+  const out = $('roiOut'); if (!out) return;
+  out.innerHTML = 'This panel: <b>' + n + '</b> Coriell samples &asymp; <b>' + usd(dna) + '</b> in control DNA + <b>' + hLo + '&ndash;' + hHi + ' hrs</b> analyst time (&asymp; ' + usd(labLo) + '&ndash;' + usd(labHi) + ').' +
+    '<div style="margin-top:5px">Do-it-yourself: <b>' + usd(totLo) + '&ndash;' + usd(totHi) + '</b> &nbsp;&middot;&nbsp; This export: <b>' + usd(Math.round(PER_PANEL)) + '</b> (1 of ' + PACK_TOKENS + ' tokens) <span style="color:#0a6e57;font-weight:700">saves ' + usd(Math.max(0, Math.round(totLo - PER_PANEL))) + '&ndash;' + usd(Math.max(0, Math.round(totHi - PER_PANEL))) + '</span></div>' +
+    '<div class="small" style="margin-top:4px">' + PACK_TOKENS + ' tokens / ' + usd(PACK_PRICE) + ' &middot; ' + usd(PER_PANEL) + ' per panel &middot; never expire.</div>';
+}
+
+/* ---------- buy ---------- */
+async function doBuy() {
+  if (window.gtag) gtag('event', 'buy_click', { event_category: 'checkout' });
+  if (!configured) { alert('Checkout is not connected yet. Please email bronwynr@phoenixlabconsulting.com to purchase.'); return; }
+  const win = window.open('', '_blank');
+  try {
+    const { ok, j } = await getJSON('/buy?json=1');
+    if (ok && j.url) { if (win) win.location = j.url; else window.location = j.url; return; }
+    if (win) win.close();
+    window.open(api('/buy'), '_blank');
+  } catch (e) { if (win) win.close(); window.open(api('/buy'), '_blank'); }
+}
+
+/* ---------- wire + boot ---------- */
+$('checkBtn').addEventListener('click', checkBalance);
+$('keyIn').addEventListener('keydown', e => { if (e.key === 'Enter') checkBalance(); });
+$('exportBtn').addEventListener('click', doExport);
+$('buyBtn').addEventListener('click', doBuy);
+$('geneFilter').addEventListener('change', renderBrowse);
+$('tSearch').addEventListener('input', renderBrowse);
+boot();
+</script>
+</body></html>
