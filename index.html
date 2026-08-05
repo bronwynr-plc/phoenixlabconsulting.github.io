@@ -4,11 +4,12 @@
      Direction C · Specimen. Design tokens: PHOENIX_DESIGN_TOKENS.md
      Last built July 2026
 
-     SHOP SWITCH: the <html> tag below carries data-shop="soon".
+     SHOP SWITCH: FLIPPED TO "live" 2026-08-05 (phoenixcomplianceshop.com resolves).
+     The <html> tag below carries data-shop="live".
      Change it to data-shop="live" the moment phoenixcomplianceshop.com resolves.
      That one word turns on every Shop link on the page. Nothing else to edit.
      ═══════════════════════════════════════════════════════════════════════════ -->
-<html lang="en" data-shop="soon">
+<html lang="en" data-shop="live">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -214,6 +215,14 @@ footer.site a{color:var(--on4);text-decoration:none;border-bottom:1px solid var(
 .themebtn:hover{border-color:var(--orange);color:var(--orange)}
 
 /* ── SHOP SWITCH — driven by data-shop on <html>. Do not edit these two rules. ── */
+/* ── D0 GATE 0 — preview CTA ── */
+.pvcta{border:1px solid var(--orange);background:var(--hover);padding:20px 22px;margin-bottom:26px}
+.pvcta .k{font-family:"IBM Plex Mono",monospace;font-size:var(--fs-xs);letter-spacing:.13em;text-transform:uppercase;color:var(--orange);display:block;margin-bottom:8px}
+.pvcta h4{margin:0 0 6px;font-size:1rem;font-weight:600;color:var(--ink)}
+.pvcta p{margin:0 0 14px;font-size:var(--fs-sm);color:var(--sub)}
+.pvcta a{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:var(--fs-xs);letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--paper);background:var(--orange);padding:11px 18px;text-decoration:none;transition:opacity .15s}
+.pvcta a:hover{opacity:.85}
+
 [data-shop="soon"] .shop-live{display:none}
 [data-shop="live"] .shop-soon{display:none}
 
@@ -666,6 +675,12 @@ footer.site a{color:var(--on4);text-decoration:none;border-bottom:1px solid var(
         </p>
       </div>
       <div class="tiers">
+        <div class="pvcta">
+          <span class="k">Free preview</span>
+          <h4>See it before you buy.</h4>
+          <p>Complete table of contents, three sample pages, the full workbook inventory, and workbook figures &mdash; 12 pages, free.</p>
+          <a href="/preview/" onclick="gtag('event','preview_cta_click',{product:'nysdoh_clep_compliance_system',gate:'gate_0'});">Request the preview &#8594;</a>
+        </div>
         <div class="tier"><div class="tn">Option 1</div><h4>Single-Laboratory License</h4><p>Full system access for one laboratory — for labs managing their own NYSDOH compliance process.</p>
           <span class="avail shop-soon">Direct purchase opening soon at phoenixcomplianceshop.com</span>
           <span class="avail shop-live">Buy directly at <a href="https://phoenixcomplianceshop.com">phoenixcomplianceshop.com</a></span>
