@@ -127,7 +127,7 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:24px}
     <div>
       <h2>Build a complete PGx validation control set in minutes.</h2>
       <p>Browse PGx targets to see available Coriell controls. Buy tokens to generate a panel using the optimizer, which packs the fewest samples that cover it, including CYP2D6 structural variations, and exports them to an Excel file that serves as your shopping list and source for expected results.</p>
-      <a class="cta lg" href="#buy">Buy 5 export tokens — $199</a>
+      <a class="cta lg" href="#buy">Buy 5 export tokens — $149</a>
       <a class="cta lg ghost" href="#preview" style="margin-left:8px">Try the free warfarin preview &darr;</a>
     </div>
     <div class="stats">
@@ -208,11 +208,11 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:24px}
   <div class="unlock" id="buy">
     <h3>Buy export tokens</h3>
     <p>Five panel exports for your lab. Each token builds one panel — a full platform preset or a single gene — with the optimizer picking the fewest control samples, ancestry-aware selection, the CYP2D6 structural set, and a two-tab Excel export (shopping list + expected results).</p>
-    <p class="lead" style="font-weight:700;color:var(--accent);margin:8px 0 2px">5 export tokens &mdash; $199 <span style="font-weight:500;color:var(--ink)">(tokens never expire)</span></p>
-    <p class="small" style="margin:2px 0 12px">Launch promo: <b>$149 for the first 5 labs</b> — applied automatically at checkout.</p>
-    <button class="cta lg" id="buyBtn">Buy 5 tokens &rarr;</button>
-    <div class="note" style="margin-top:12px">Secure checkout &amp; tax handled by FastSpring, our authorized reseller and Merchant of Record. Your license key is emailed to you and shown on your receipt — paste it above to export. Use of the Finder is governed by our Terms of Use. For research use only. Genotypes are curated from 1000 Genomes and GeT-RM/Coriell sources; verify critical controls against primary sources before validation.</div>
-  </div>
+<p class="lead" style="font-weight:700;color:var(--accent);margin:8px 0 2px">5 export tokens &mdash; <s style="font-weight:500;color:var(--ink);opacity:.6">$199.00&nbsp;USD</s> $149.00&nbsp;USD <span style="font-weight:500;color:var(--ink)">(tokens never expire)</span></p>
+    <p class="small" style="margin:2px 0 12px">Introductory price — first 5 orders, or through 31 October 2026, whichever comes first.</p>
+    <p class="small" style="margin:2px 0 10px"><b>Card checkout is being activated.</b> Until it is live, email us and we will invoice you directly — ACH or check is fine.</p>
+    <button class="cta lg" id="buyBtn">Request an invoice &rarr;</button>
+    <div class="note" style="margin-top:12px">Secure checkout &amp; tax handled by FastSpring, our authorized reseller and Merchant of Record. Your license key is emailed to you and shown on your receipt — paste it above to export. Use of the Finder is governed by our <a href="https://phoenixcomplianceshop.com/terms-of-use.html">Terms of Use</a>. For research use only. Genotypes from 1000&nbsp;Genomes &amp; GeT-RM/Coriell curation; verify critical controls against primary sources before validation.</div>  </div>
 </div>
 <footer>&copy; Phoenix Lab Consulting &middot; PGx Control Finder &middot; For Research Use Only</footer>
 
@@ -226,7 +226,7 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:24px}
 const WORKER = "https://pgx-controls-finder.phoenixlabconsulting.workers.dev";
 /* ------------------------------------------------------------------------- */
 
-const PACK_PRICE = 199, PACK_TOKENS = 5, PER_PANEL = 199 / 5; // $39.80
+const PACK_PRICE = 149, PACK_TOKENS = 5, PER_PANEL = 149 / 5; // $29.80
 const configured = /^https?:\/\//.test(WORKER);
 const api = p => WORKER.replace(/\/+$/, "") + p;
 
@@ -530,14 +530,7 @@ function recalcROI() {
 /* ---------- buy ---------- */
 async function doBuy() {
   if (window.gtag) gtag('event', 'buy_click', { event_category: 'checkout' });
-  if (!configured) { alert('Checkout is not connected yet. Please email bronwynr@phoenixlabconsulting.com to purchase.'); return; }
-  const win = window.open('', '_blank');
-  try {
-    const { ok, j } = await getJSON('/buy?json=1');
-    if (ok && j.url) { if (win) win.location = j.url; else window.location = j.url; return; }
-    if (win) win.close();
-    window.open(api('/buy'), '_blank');
-  } catch (e) { if (win) win.close(); window.open(api('/buy'), '_blank'); }
+  window.location = 'mailto:bronwynr@phoenixlabconsulting.com?subject=PGx%20Control%20Finder%20%E2%80%94%205%20export%20tokens';
 }
 
 /* ---------- wire + boot ---------- */
