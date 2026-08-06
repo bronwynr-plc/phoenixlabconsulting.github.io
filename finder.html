@@ -107,6 +107,18 @@ select,input[type=text]{padding:9px 11px;border:1px solid var(--line);border-rad
 .unlock p{color:var(--mut);margin:0 0 10px}
 footer{text-align:center;color:var(--mut);font-size:12px;padding:24px}
 .hidden{display:none}
+/* inventory gap analysis */
+textarea{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#fff;resize:vertical;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px}
+.gapstats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:8px 0 12px}
+.gapstat{border:1px solid var(--line);border-radius:9px;padding:10px 12px;background:#fafafa}
+.gapstat b{display:block;font-size:21px;color:var(--teal-d);line-height:1.15}
+.gapstat span{font-size:11.5px;color:var(--mut)}
+.gapunlock{margin-top:14px;padding:14px 16px;border:1px solid #f0d2c4;background:linear-gradient(100deg,#fff,#fff7f3);border-radius:10px}
+.gapunlock .h{font-weight:700;margin-bottom:4px}
+.invrow{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start;margin-top:6px}
+.invrow .col{flex:1;min-width:260px}
+.idchips{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+@media(max-width:640px){.gapstats{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:640px){.hero h2{font-size:22px}}
 </style>
 <!-- Google tag (gtag.js) — same property as phoenixlabconsulting.com -->
@@ -127,8 +139,10 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:24px}
     <div>
       <h2>Build a complete PGx validation control set in minutes.</h2>
       <p>Browse PGx targets to see available Coriell controls. Buy tokens to generate a panel using the optimizer, which packs the fewest samples that cover it, including CYP2D6 structural variations, and exports them to an Excel file that serves as your shopping list and source for expected results.</p>
+      <p style="margin-top:-6px"><b>Already have Coriell samples on the shelf?</b> Check your existing inventory against the panel you need to validate — <a href="#gaps">see what you already cover and what's missing</a>. The coverage summary is free, no key needed.</p>
       <a class="cta lg" href="#buy">Buy 5 export tokens — $149</a>
       <a class="cta lg ghost" href="#preview" style="margin-left:8px">Try the free warfarin preview &darr;</a>
+      <a class="cta lg ghost" href="#gaps" style="margin-left:8px;margin-top:8px">Check my inventory &darr;</a>
     </div>
     <div class="stats">
       <div class="stat"><b id="s-targets">&mdash;</b><span>curated targets</span></div>
@@ -168,6 +182,46 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:24px}
     <p class="lead">Free lookup tools don't include CYP2D6 structural variants. When any CYP2D6 target is selected for export, the Finder automatically adds three <b>independent</b> controls—a deletion, a duplication, and a hybrid/tandem—each a clean single-state sample, ensuring every copy-number readout is unambiguous.</p>
     <div class="cnvcards" id="cnvCards"></div>
     <p class="small" style="margin-top:11px" id="cnvSpineNote">Structural spine: GeT-RM (Gaedigk et&nbsp;al. 2019), consensus CYP2D6 diplotypes. Maps to ThermoFisher TrueMark (Exon&nbsp;9 + Intron&nbsp;2) and Agena VeriDose CYP2D6 CNV.</p>
+  </div>
+
+  <!-- ============ INVENTORY GAP ANALYSIS ============ -->
+  <div class="section" id="gaps">
+    <h3>Check your existing inventory <span class="badge free">summary free</span></h3>
+    <p class="lead">Paste the Coriell IDs you already hold, pick the platform you need to validate, and the Finder reports how much of that panel your shelf already covers and how many targets are still open — including the CYP2D6 structural states. <b>The coverage summary is free.</b> The named gap list and an optimized shopping list to close it cost 1&nbsp;token — and nothing at all if you have already exported that platform.</p>
+
+    <div class="invrow">
+      <div class="col">
+        <label class="small" for="invIn" style="font-weight:700;color:var(--ink)">Your Coriell sample IDs</label>
+        <textarea id="invIn" rows="6" placeholder="Paste a column straight out of your inventory sheet:&#10;NA12878&#10;NA10005&#10;HG00156&#10;GM12244&#10;&#10;Headers, extra columns, and commas are fine &mdash; they are ignored."></textarea>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:7px">
+          <input type="file" id="invFile" accept=".csv,.tsv,.txt" class="small" style="max-width:230px"/>
+          <span class="small" id="invCount">Paste or upload a column of Coriell IDs (NA / GM / HG).</span>
+        </div>
+        <div class="small" style="margin-top:5px">CSV, TSV or plain text. Excel files aren't read directly — copy the ID column out of Excel and paste it here.</div>
+      </div>
+      <div class="col" style="max-width:340px">
+        <label class="small" for="gapPlatform" style="font-weight:700;color:var(--ink)">Platform you need to validate</label>
+        <select id="gapPlatform" style="width:100%;margin-top:4px"><option value="">Loading platforms&hellip;</option></select>
+        <div class="optrow" style="margin-top:12px;flex-direction:column;align-items:flex-start;gap:9px">
+          <label class="small"><input type="checkbox" id="gapWantHom" checked/> require a homozygous control per target</label>
+          <label class="small">CYP2D6 CNV controls per state <input type="number" id="gapCnvN" value="1" min="1" max="9"/> <span style="color:var(--mut)">(NYSDOH expects &ge;3)</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="keyrow">
+      <input type="text" id="gapKeyIn" placeholder="Have tokens? Paste your license key" autocomplete="off" spellcheck="false"/>
+      <button class="cta ghost" id="gapCheckBtn">Check balance</button>
+      <span id="gapBalOut" class="small"></span>
+    </div>
+
+    <div style="margin-top:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <button class="cta ghost" id="gapFreeBtn" disabled>Check my coverage &mdash; free</button>
+      <button class="cta" id="gapUnlockBtn" disabled>Show the gaps &amp; what closes them (1 token)</button>
+    </div>
+
+    <div id="gapMsg" style="margin-top:12px"></div>
+    <div id="gapOut"></div>
   </div>
 
   <!-- ============ EXPORT PICKER ============ -->
@@ -262,6 +316,8 @@ function boot() {
     $('browseBody').innerHTML = '<tr><td colspan="8" class="small">Browse loads once the Worker URL is configured.</td></tr>';
     $('presetGrid').innerHTML = '<span class="small">Export menu loads once the Worker URL is configured.</span>';
     $('geneGrid').innerHTML = '';
+    $('gapPlatform').innerHTML = '<option value="">Unavailable</option>';
+    $('invCount').textContent = 'Gap analysis loads once the Worker URL is configured.';
     return;
   }
   loadStats(); loadPreview(); loadCatalog(); loadTargets();
@@ -295,6 +351,7 @@ async function loadCatalog() {
     if (!ok || !j.presets) { $('presetGrid').innerHTML = '<div class="banner err">Export menu unavailable right now.</div>'; return; }
     CATALOG = j;
     renderPresets(j.presets);
+    renderGapPlatforms(j.presets);
     renderGeneGrid(j.genes);
     if (j.cnvSpine) renderCnvSpine(j.cnvSpine);
   } catch (e) { $('presetGrid').innerHTML = '<div class="banner err">Could not reach the export service.</div>'; }
@@ -311,6 +368,12 @@ function renderPresets(presets) {
   ).join('');
   Array.from($('presetGrid').querySelectorAll('.pcard')).forEach(el =>
     el.addEventListener('click', () => selectUnit(el.getAttribute('data-unit'), 'preset')));
+}
+
+function renderGapPlatforms(presets) {
+  $('gapPlatform').innerHTML = '<option value="">Select a platform&hellip;</option>' + presets.map(p =>
+    '<option value="' + esc(p.id) + '">' + esc(p.name) + ' — ' + p.targets + ' targets</option>').join('');
+  refreshGapBtns();
 }
 
 function renderGeneGrid(genes) {
@@ -390,30 +453,37 @@ function refreshExportBtn() {
 }
 
 /* ---------- key / balance ---------- */
-async function checkBalance() {
-  const key = $('keyIn').value.trim();
-  if (!key) { $('balOut').innerHTML = '<span class="balpill" style="background:#fdecec;color:#8b1a1a">Paste a key first.</span>'; return; }
-  $('balOut').innerHTML = '<span class="small">Checking&hellip;</span>';
+// One key, two entry points (export section + gap section). Both inputs and both
+// status pills are kept in sync so a key pasted in either place unlocks both.
+function setBal(html) { $('balOut').innerHTML = html; $('gapBalOut').innerHTML = html; }
+function errPill(t) { return '<span class="balpill" style="background:#fdecec;color:#8b1a1a">' + esc(t) + '</span>'; }
+
+async function checkBalance(srcId) {
+  const src = (srcId && $(srcId)) ? $(srcId) : $('keyIn');
+  const key = (src.value || '').trim();
+  $('keyIn').value = key; $('gapKeyIn').value = key;
+  if (!key) { setBal(errPill('Paste a key first.')); return; }
+  setBal('<span class="small">Checking&hellip;</span>');
   if (window.gtag) gtag('event', 'key_check', { event_category: 'tokens' });
   try {
     const { ok, j } = await getJSON('/balance?key=' + encodeURIComponent(key));
     if (!ok || j.error) {
       licenseKey = ''; balance = null;
-      const map = { license_disabled: 'This license key is disabled.', license_expired: 'This license key has expired.', ls_validate_failed: 'Key not recognized — check for typos.' };
-      $('balOut').innerHTML = '<span class="balpill" style="background:#fdecec;color:#8b1a1a">' + esc(map[j.error] || j.error || 'Invalid key') + '</span>';
-      refreshExportBtn(); return;
+      const map = { license_disabled: 'This license key is disabled.', license_expired: 'This license key has expired.', invalid_key: 'Key not recognized — check for typos.', ls_validate_failed: 'Key not recognized — check for typos.' };
+      setBal(errPill(map[j.error] || j.error || 'Invalid key'));
+      refreshExportBtn(); refreshGapBtns(); return;
     }
     licenseKey = key;
     balance = { limit: j.limit, used: j.used, remaining: j.remaining };
-    renderBalance(); refreshExportBtn();
+    renderBalance(); refreshExportBtn(); refreshGapBtns();
     if (selUnit) $('selInfo').textContent = 'Selected — ready to export.';
-  } catch (e) { $('balOut').innerHTML = '<span class="balpill" style="background:#fdecec;color:#8b1a1a">Could not reach the token service.</span>'; }
+  } catch (e) { setBal(errPill('Could not reach the token service.')); }
 }
 function renderBalance() {
-  if (!balance) { $('balOut').textContent = ''; return; }
+  if (!balance) { setBal(''); return; }
   const rem = balance.remaining == null ? '?' : balance.remaining;
   const lim = balance.limit == null ? PACK_TOKENS : balance.limit;
-  $('balOut').innerHTML = '<span class="balpill">' + rem + ' of ' + lim + ' tokens left</span>';
+  setBal('<span class="balpill">' + rem + ' of ' + lim + ' tokens left</span>');
 }
 
 /* ---------- export ---------- */
@@ -452,8 +522,8 @@ async function doExport() {
   finally { refreshExportBtn(); }
 }
 
-function wireDownload(j) {
-  const btn = $('dlBtn'); if (!btn) return;
+function wireDownload(j, btnId) {
+  const btn = $(btnId || 'dlBtn'); if (!btn) return;
   btn.addEventListener('click', () => {
     if (!j.xlsxBase64) return;
     const bin = atob(j.xlsxBase64), len = bin.length, u8 = new Uint8Array(len);
@@ -461,7 +531,7 @@ function wireDownload(j) {
     const blob = new Blob([u8], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download = 'PGx_' + j.unit.replace(/[^a-z0-9]+/gi, '_') + '.xlsx';
+    a.href = url; a.download = 'PGx_' + String(j.unit || 'panel').replace(/[^a-z0-9]+/gi, '_') + '.xlsx';
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 4000);
     if (window.gtag) gtag('event', 'xlsx_download', { event_category: 'tokens', event_label: j.unit });
@@ -500,7 +570,7 @@ function renderPanel(j, o) {
     html += '</tbody></table></div>';
   }
   if (!preview && j.xlsxBase64) {
-    html += '<div style="margin-top:12px"><button class="cta" id="dlBtn">⬇ Download Excel (shopping list + expected results)</button></div>';
+    html += '<div style="margin-top:12px"><button class="cta" id="' + ((o && o.dlId) || 'dlBtn') + '">⬇ Download Excel (shopping list + expected results)</button></div>';
   } else if (preview) {
     html += '<div style="margin-top:12px"><a class="cta" href="#buy">Buy tokens to export full panels &rarr;</a></div>';
   }
@@ -527,6 +597,170 @@ function recalcROI() {
     '<div class="small" style="margin-top:4px">' + PACK_TOKENS + ' tokens / ' + usd(PACK_PRICE) + ' &middot; never expire.</div>';
 }
 
+/* ---------- inventory gap analysis (/diff) ----------
+   The worker's three tiers (worker.js handleDiff):
+     no key                          -> aggregate counts only, never names or IDs
+     key, preset already exported    -> full detail free  (reason platform_already_owned)
+     key, this diff already run      -> full detail free  (reason diff_already_purchased)
+     key, neither                    -> consumes 1 token as unit_id "diff:<preset>"
+   Note: a paid diff does NOT unlock that preset's own export. Deliberate — see
+   the Workstream G decision log. The copy below says so plainly.
+   ---------------------------------------------------------------- */
+
+// Tokenise whatever they pasted. Keep anything that has BOTH a letter and a digit:
+// that drops column headers ("Coriell ID") and bare row numbers, while keeping real
+// IDs *and* typo'd ones, so the worker can report them back as unrecognized.
+function parseInventory(text) {
+  const out = [], seen = new Set();
+  String(text || '').split(/[\s,;|]+/).forEach(tok => {
+    let t = tok.replace(/^["'(\[]+/, '').replace(/["')\].,;:]+$/, '').trim().toUpperCase();
+    if (!t || !/[0-9]/.test(t) || !/[A-Z]/.test(t)) return;
+    if (seen.has(t)) return;
+    seen.add(t); out.push(t);
+  });
+  return out;
+}
+
+function refreshGapBtns() {
+  const ids = parseInventory(($('invIn') || {}).value);
+  const plat = ($('gapPlatform') || {}).value;
+  $('invCount').textContent = ids.length
+    ? (ids.length + ' sample ID' + (ids.length === 1 ? '' : 's') + ' found')
+    : 'Paste or upload a column of Coriell IDs (NA / GM / HG).';
+  const ready = !!(ids.length && plat && configured);
+  $('gapFreeBtn').disabled = !ready;
+  $('gapUnlockBtn').disabled = !(ready && licenseKey && balance);
+}
+
+async function runDiff(paid) {
+  const ids = parseInventory($('invIn').value);
+  const plat = $('gapPlatform').value;
+  if (!ids.length || !plat) return;
+  $('gapFreeBtn').disabled = true; $('gapUnlockBtn').disabled = true;
+  $('gapMsg').innerHTML = '<div class="banner info">Comparing your inventory against the panel&hellip;</div>';
+  if (window.gtag) gtag('event', paid ? 'gap_unlock' : 'gap_check', { event_category: 'tokens', event_label: plat });
+  try {
+    const body = {
+      platform: plat, inventory: ids,
+      wantHom: !!(($('gapWantHom') || {}).checked),
+      cnvPerState: Math.max(1, +(($('gapCnvN') || {}).value) || 1)
+    };
+    if (paid) body.key = licenseKey;
+    const { ok, status, j } = await getJSON('/diff', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+    });
+    if (!ok || j.error) {
+      if (j.error === 'out_of_tokens') {
+        balance = { limit: j.limit, used: j.used, remaining: 0 }; renderBalance();
+        $('gapMsg').innerHTML = '<div class="banner warn">Out of tokens. <a href="#buy">Buy 5 more &rarr;</a></div>';
+      } else if (j.error === 'license_disabled') {
+        $('gapMsg').innerHTML = '<div class="banner err">This license key is disabled.</div>';
+      } else if (j.error === 'diff_requires_platform_preset') {
+        $('gapMsg').innerHTML = '<div class="banner err">Gap analysis runs against a platform preset, not a single gene.</div>';
+      } else {
+        $('gapMsg').innerHTML = '<div class="banner err">Gap analysis failed: ' + esc(j.error || ('HTTP ' + status)) + '</div>';
+      }
+      refreshGapBtns(); return;
+    }
+    if (j.token && j.token.remaining != null) {
+      balance = { limit: j.token.limit, used: j.token.used, remaining: j.token.remaining }; renderBalance();
+    }
+    renderDiff(j, paid);
+  } catch (e) {
+    $('gapMsg').innerHTML = '<div class="banner err">Could not reach the gap-analysis service.</div>';
+  } finally { refreshGapBtns(); }
+}
+
+function gapStat(big, label) {
+  return '<div class="gapstat"><b>' + esc(big) + '</b><span>' + esc(label) + '</span></div>';
+}
+
+function renderDiff(j, paid) {
+  // token line
+  let msg = '';
+  if (paid && j.token) {
+    if (j.token.consumed) msg = '<div class="banner ok">Gap list unlocked &mdash; 1 token spent.</div>';
+    else if (j.token.reason === 'platform_already_owned') msg = '<div class="banner ok">Free &mdash; you have already exported this platform, so the gap view costs nothing.</div>';
+    else if (j.token.reason === 'diff_already_purchased') msg = '<div class="banner ok">Free &mdash; you have already run this gap analysis. Re-runs never cost a token.</div>';
+    else msg = '<div class="banner ok">Gap list unlocked.</div>';
+  }
+  $('gapMsg').innerHTML = msg;
+
+  const coverable = j.coverable_targets, cov = j.covered_count;
+  const pct = coverable ? Math.round(100 * cov / coverable) : 0;
+
+  let h = '<div style="font-weight:700;margin:8px 0 2px">' + esc(j.label) + '</div>';
+  h += '<div class="gapstats">' +
+    gapStat(cov + ' / ' + coverable, 'targets your shelf already covers') +
+    gapStat(pct + '%', 'of the coverable panel') +
+    gapStat(j.gap_count, 'gaps still open' + (j.cnv_gap_states ? ' (incl. ' + j.cnv_gap_states + ' CNV)' : '')) +
+    gapStat(j.recognized_count, 'of your IDs found in the database') +
+    '</div>';
+
+  if (j.no_control_count) {
+    h += '<div class="small" style="margin:-4px 0 10px">' + j.no_control_count + ' of this platform\'s ' + j.total_targets +
+      ' targets have no Coriell control in the database at all, so they are excluded from the coverage maths above.</div>';
+  }
+  if (j.unrecognized_count) {
+    h += '<div class="banner warn">' + j.unrecognized_count + ' entr' + (j.unrecognized_count === 1 ? 'y was' : 'ies were') +
+      ' not recognised as Coriell IDs in the database' +
+      (paid && j.unrecognizedIds && j.unrecognizedIds.length ? ': <span style="font-family:ui-monospace,Menlo,Consolas,monospace">' + j.unrecognizedIds.map(esc).join(', ') + '</span>' : '') +
+      '. Check for typos or GM/NA prefix mix-ups.</div>';
+  }
+
+  if (!paid) {
+    h += '<div class="gapunlock">' +
+      '<div class="h">See exactly which targets are open &mdash; and the fewest samples that close them.</div>' +
+      '<div class="small">Named gap targets with AMP tier and CPIC level, the CYP2D6 structural check, and an optimizer-built shopping list with expected results as a two-tab Excel file. ' +
+      '<b>1 token</b>, or free if you have already exported ' + esc(j.label) + ' or run this same gap analysis before. ' +
+      'Paste your key above and press <b>Show the gaps</b>.</div>' +
+      '<div class="small" style="margin-top:6px">No tokens? <a href="#buy">5 tokens &mdash; $149 &rarr;</a></div>' +
+      '</div>';
+    $('gapOut').innerHTML = h;
+    return;
+  }
+
+  // ---- paid / owned tier ----
+  const gt = j.gapTargets || [];
+  if (gt.length) {
+    h += '<div style="font-weight:700;margin:14px 0 4px">Targets you are missing (' + gt.length + '):</div>';
+    h += '<div class="scrollbox"><table><thead><tr><th>Gene</th><th>Allele / rsID</th><th>AMP tier</th><th>CPIC</th><th># Het</th><th># Hom</th></tr></thead><tbody>';
+    gt.forEach(t => {
+      h += '<tr><td class="gene">' + esc(t.gene) + '</td><td>' + esc(t.allele || t.rsid || '') + '</td>' +
+        '<td>' + esc(t.amp_tier || '') + '</td><td class="small">' + esc(t.cpic || '') + '</td>' +
+        '<td>' + esc(t.n_het) + '</td><td>' + esc(t.n_hom) + '</td></tr>';
+    });
+    h += '</tbody></table></div>';
+  } else {
+    h += '<div class="banner ok">No SNP-level gaps &mdash; your inventory covers every coverable target on this platform.</div>';
+  }
+
+  if (j.cnvGap && j.cnvGap.length) {
+    h += '<div class="banner warn"><b>CYP2D6 structural controls missing:</b> ' +
+      j.cnvGap.map(c => esc(c.label)).join(' &middot; ') +
+      '. These are included in the recommended purchase below.</div>';
+  } else if (j.cnv_gap_states === 0 && gt.length === 0) {
+    h += '<div class="small">CYP2D6 structural states all covered.</div>';
+  }
+
+  const rp = j.recommendedPurchase || {};
+  const sl = rp.shoppingList || [];
+  if (sl.length) {
+    h += '<div style="font-weight:700;margin:16px 0 4px">Buy these ' + sl.length + ' sample' + (sl.length === 1 ? '' : 's') + ' to close the gaps:</div>';
+    h += renderPanel({
+      shoppingList: sl, targetDetails: rp.targetDetails || [],
+      warnings: j.warnings || [], xlsxBase64: j.xlsxBase64,
+      controls: sl.length, label: j.label, unit: 'gapfill_' + j.platform
+    }, { preview: false, dlId: 'gapDlBtn' });
+  }
+
+  h += '<div class="small" style="margin-top:12px">This gap analysis does not include the full ' + esc(j.label) +
+    ' export. If you want the complete panel &mdash; every target, not just your gaps &mdash; select it in <a href="#export">Export a panel</a> below.</div>';
+
+  $('gapOut').innerHTML = h;
+  wireDownload({ xlsxBase64: j.xlsxBase64, unit: 'gapfill_' + j.platform }, 'gapDlBtn');
+}
+
 /* ---------- buy ---------- */
 async function doBuy() {
   if (window.gtag) gtag('event', 'buy_click', { event_category: 'checkout' });
@@ -534,9 +768,22 @@ async function doBuy() {
 }
 
 /* ---------- wire + boot ---------- */
-$('checkBtn').addEventListener('click', checkBalance);
-$('keyIn').addEventListener('keydown', e => { if (e.key === 'Enter') checkBalance(); });
+$('checkBtn').addEventListener('click', () => checkBalance('keyIn'));
+$('keyIn').addEventListener('keydown', e => { if (e.key === 'Enter') checkBalance('keyIn'); });
 $('exportBtn').addEventListener('click', doExport);
+$('gapCheckBtn').addEventListener('click', () => checkBalance('gapKeyIn'));
+$('gapKeyIn').addEventListener('keydown', e => { if (e.key === 'Enter') checkBalance('gapKeyIn'); });
+$('invIn').addEventListener('input', refreshGapBtns);
+$('gapPlatform').addEventListener('change', refreshGapBtns);
+$('gapFreeBtn').addEventListener('click', () => runDiff(false));
+$('gapUnlockBtn').addEventListener('click', () => runDiff(true));
+$('invFile').addEventListener('change', e => {
+  const f = e.target.files && e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => { $('invIn').value = String(r.result || '').slice(0, 300000); refreshGapBtns(); };
+  r.onerror = () => { $('invCount').textContent = 'Could not read that file — paste the IDs instead.'; };
+  r.readAsText(f);
+});
 $('buyBtn').addEventListener('click', doBuy);
 $('geneFilter').addEventListener('change', renderBrowse);
 $('tSearch').addEventListener('input', renderBrowse);
