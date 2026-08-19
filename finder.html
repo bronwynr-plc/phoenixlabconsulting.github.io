@@ -317,9 +317,9 @@ textarea{width:100%;padding:9px 11px;border:1px solid var(--rule);border-radius:
     <p>Five panel exports for your lab. Each token builds one panel — a full platform preset or a single gene — with the optimizer picking the fewest control samples, ancestry-aware selection, the CYP2D6 structural set, and a two-tab Excel export (shopping list + expected results).</p>
 <p class="lead" style="font-weight:700;color:var(--accent);margin:8px 0 2px">5 export tokens &mdash; <s style="font-weight:500;color:var(--ink);opacity:.6">$199.00&nbsp;USD</s> $149.00&nbsp;USD <span style="font-weight:500;color:var(--ink)">(tokens never expire)</span></p>
     <p class="small" style="margin:2px 0 12px">Introductory price — first 5 orders, or through 31 October 2026, whichever comes first.</p>
-    <p class="small" style="margin:2px 0 10px"><b>Card checkout is being activated.</b> Until it is live, email us and we will invoice you directly — ACH or check is fine.</p>
-    <button class="cta lg" id="buyBtn">Request an invoice &rarr;</button>
-    <div class="note" style="margin-top:12px">Secure checkout &amp; tax handled by FastSpring, our authorized reseller and Merchant of Record. Your license key is emailed to you and shown on your receipt — paste it above to export. Use of the Finder is governed by our <a href="https://phoenixcomplianceshop.com/terms-of-use.html">Terms of Use</a>. For research use only. Genotypes from 1000&nbsp;Genomes &amp; GeT-RM/Coriell curation; verify critical controls against primary sources before validation.</div>  </div>
+    <a class="cta lg" id="buyBtn" href="https://phoenixcomplianceshop.onfastspring.com/pgx-control-finder">Buy 5 export tokens &mdash; $149 &rarr;</a>
+    <p class="small" style="margin:10px 0 0">Need an invoice or a PO? <a href="mailto:bronwynr@phoenixlabconsulting.com?subject=PGx%20Control%20Finder%20%E2%80%94%20invoice%20request">Email us</a> &mdash; ACH or check is fine.</p>
+    <div class="note" style="margin-top:12px">Secure checkout &amp; tax handled by FastSpring, our authorized reseller and Merchant of Record. Your license key is emailed to you and shown on your receipt — paste it above to export. Use of the Finder is governed by our <a href="https://phoenixcomplianceshop.com/terms-of-use.html">Terms of Use</a>. For research use only. Phoenix Laboratory Consulting does not guarantee that any control set produced by the Finder will be accepted by CAP, CLIA, NYSDOH&nbsp;CLEP, or any other accrediting or regulatory body; sample selection, and the validation built on it, remain your laboratory's decision and responsibility. Genotypes from 1000&nbsp;Genomes &amp; GeT-RM/Coriell curation; verify critical controls against primary sources before validation.</div>  </div>
 </div>
 <footer>&copy; Phoenix Lab Consulting &middot; PGx Control Finder &middot; For Research Use Only</footer>
 
@@ -755,10 +755,12 @@ function renderDiff(j, paid) {
       ' targets have no Coriell control in the database at all, so they are excluded from the coverage maths above.</div>';
   }
   if (j.unrecognized_count) {
-    h += '<div class="banner warn">' + j.unrecognized_count + ' entr' + (j.unrecognized_count === 1 ? 'y was' : 'ies were') +
-      ' not recognised as Coriell IDs in the database' +
-      (paid && j.unrecognizedIds && j.unrecognizedIds.length ? ': <span style="font-family:ui-monospace,Menlo,Consolas,monospace">' + j.unrecognizedIds.map(esc).join(', ') + '</span>' : '') +
-      '. Check for typos or GM/NA prefix mix-ups.</div>';
+    const one = j.unrecognized_count === 1;
+    h += '<div class="banner info"><b>' + j.unrecognized_count + ' ID' + (one ? '' : 's') + ' not in the Finder\'s dataset</b>' +
+      (paid && j.unrecognizedIds && j.unrecognizedIds.length ? ' &mdash; <span style="font-family:ui-monospace,Menlo,Consolas,monospace">' + j.unrecognizedIds.map(esc).join(', ') + '</span>' : '') +
+      '<div style="margin-top:4px">' + (one ? 'This may still be a perfectly good sample.' : 'These may still be perfectly good samples.') +
+      ' The Finder holds only Coriell samples with published PGx genotypes from 1000&nbsp;Genomes and GeT-RM, so an ID that is not here is one we have no genotype data for &mdash; not one that does not exist. ' +
+      (one ? 'It is' : 'They are') + ' left out of the coverage figures above rather than counted as gaps. If any look mistyped, check the GM/NA prefix.</div></div>';
   }
 
   if (!paid) {
@@ -817,7 +819,8 @@ function renderDiff(j, paid) {
 /* ---------- buy ---------- */
 async function doBuy() {
   if (window.gtag) gtag('event', 'buy_click', { event_category: 'checkout' });
-  window.location = 'mailto:bronwynr@phoenixlabconsulting.com?subject=PGx%20Control%20Finder%20%E2%80%94%205%20export%20tokens';
+  // Navigation is the anchor's href (FastSpring checkout). Do NOT set window.location here —
+  // it hijacks cmd-click / open-in-new-tab and re-introduces the retired mailto path.
 }
 
 /* ---------- wire + boot ---------- */
