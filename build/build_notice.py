@@ -26,6 +26,19 @@ doccontrol = re.search(r'(?s)<div class="doccontrol">.*?</div></div>', site).gro
 footer_html= re.search(r'(?s)<footer class="site">.*?</footer>', site).group(0)
 prepaint   = re.search(r"(?s)<script>\(function\(\)\{try\{var t=localStorage.*?</script>", site).group(0)
 
+# Google tag, lifted from the live site so this page reports to the same property.
+# Fail loudly rather than silently shipping the placeholder (see the guard before write).
+_an = re.search(
+    r'(?s)<!-- Google tag \(gtag\.js\).*?-->\s*'
+    r'<script async src="https://www\.googletagmanager\.com/gtag/js\?id=[^"]+"></script>\s*'
+    r'<script>.*?</script>',
+    site)
+if not _an:
+    sys.exit(f"ERROR: no Google tag block found in {SITE}. "
+             "The notice page would ship without analytics. "
+             "Check the gtag markup in index.html, then re-run.")
+analytics = _an.group(0)
+
 # Sub-page nav: homepage anchors must become root-relative.
 header_html = re.sub(r'href="#(about|services|nysdoh|finder|contact|top)"',
                      r'href="/#\1"', header_html)
@@ -222,5 +235,15 @@ b.addEventListener('click',function(){{var n=cur()==='dark'?'light':'dark';docum
 </html>
 """
 
+page = page.replace("__ANALYTICS__", analytics)
+
+# Guard: no template placeholder may reach the published page. This exists because
+# __ANALYTICS__ shipped unsubstituted once, dropping analytics and printing the raw
+# token into <head>. Catches any future __TOKEN__ too.
+_left = sorted(set(re.findall(r"__[A-Z][A-Z0-9_]*__", page)))
+if _left:
+    sys.exit(f"ERROR: unsubstituted placeholder(s) in output: {', '.join(_left)}. "
+             "Nothing written.")
+
 OUT.write_text(page, encoding="utf-8")
-print(f"wrote {OUT}  ({len(page):,} bytes)")
+print(f"wrote {OUT}  ({len(page):,} bytes)  [analytics: {len(analytics)} chars, placeholders: 0]")
