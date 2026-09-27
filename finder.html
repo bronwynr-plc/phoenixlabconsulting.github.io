@@ -24,7 +24,7 @@
 <meta name="twitter:description" content="Find Coriell reference controls for pharmacogenetic assay validation, mapped to your platform. Free warfarin preview."/>
 <meta name="twitter:image" content="https://phoenixlabconsulting.com/finder-og.png"/>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 
 /* ============================================================
    Phoenix brand tokens — aligned to PHOENIX_DESIGN_TOKENS.md §2
@@ -36,6 +36,7 @@
    ============================================================ */
 :root{
   color-scheme:light;
+  --teal:#2B6164; --band:#F1ECCE; --gold:#E9B44C;
   --orange:#C0390E; --orange-h:#A83208; --orange-tint:#FDEEE7;
   --ink:#111111; --paper:#FCFCFB; --sub:#5A5652; --faint:#8E8981;
   --rule:#D6D3CD; --rule-lt:#EAE7E2; --field:#F4F2EE; --field-2:#EAE7E2;
@@ -70,10 +71,31 @@
   --hom:#0072B2; --het:#E69F00; --none:#767676; --amp1:#B37BD6;
   --on-hom:#FFFFFF; --on-het:#111111; --on-none:#FFFFFF;
   --zhom:#5FB0E8; --zhet:#F0B840; --znone:#A8A29A;
+  --teal:#50A2A7; --band:#151210; --gold:#4C3D3B;
+}
+@media (prefers-color-scheme: dark){
+:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --orange:#D8501C; --orange-h:#E4663A; --orange-tint:#2A1710;
+  --ink:#F2F0EC; --paper:#0E0E0D; --sub:#A8A29A; --faint:#7C766E;
+  --rule:#2E2B27; --rule-lt:#232120; --field:#171614; --field-2:#232120;
+  --card:#171614; --mark:#F2F0EC;
+  --hdr-a:#000000; --hdr-b:#232120; --on-hdr:#F2F0EC;
+  --disabled:#4A4741;
+  --ring:rgba(242,240,236,.22); --shadow:rgba(0,0,0,.5);
+  --unlock-a:#171614; --unlock-b:#221812; --unlock-line:#5C3524;
+  --warn-bg:#2A2118; --warn-ln:#5C4A2A; --warn-tx:#E8C88A;
+  --err-bg:#2B1717;  --err-ln:#5E2E2E;  --err-tx:#F0A9A9;
+  --ok-bg:#14241C;   --ok-ln:#2E5943;   --ok-tx:#86D6AE;
+  --hom:#0072B2; --het:#E69F00; --none:#767676; --amp1:#B37BD6;
+  --on-hom:#FFFFFF; --on-het:#111111; --on-none:#FFFFFF;
+  --zhom:#5FB0E8; --zhet:#F0B840; --znone:#A8A29A;
+  --teal:#50A2A7; --band:#151210; --gold:#4C3D3B;
+}
 }
 
 *{box-sizing:border-box}
-body{margin:0;font:15px/1.55 'DM Sans',-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--paper)}
+body{margin:0;font:15px/1.55 "Figtree",-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--paper)}
 a{color:var(--orange)}
 header{background:linear-gradient(100deg,var(--hdr-a),var(--hdr-b));color:var(--on-hdr);padding:16px 22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 header h1{font-size:20px;margin:0;font-weight:700}
@@ -171,6 +193,26 @@ textarea{width:100%;padding:9px 11px;border:1px solid var(--rule);border-radius:
 /* theme toggle — matches the button on the other Phoenix pages */
 .themetoggle{margin-left:auto;background:transparent;color:var(--on-hdr);border:1px solid rgba(242,240,236,.35);border-radius:6px;padding:6px 12px;font:inherit;font-size:12.5px;cursor:pointer}
 .themetoggle:hover{border-color:var(--on-hdr)}
+
+/* == Figtree + square hairline geometry + MCM Refined, Workstream I, 2026-09-27 ==
+   The brand has no rounded corners, drop shadows or gradients. Okabe-Ito pill hues untouched. */
+*,*::before,*::after{border-radius:0!important}
+[style*="border-radius"]{border-radius:0!important}
+.section{box-shadow:none}
+header{background:var(--hdr-a)}
+.unlock,.gapunlock{background:var(--band)}
+button{font-family:inherit}
+.pcard .tk{color:var(--teal)}
+.badge.lock{color:var(--ink)}
+header h1,.hero h2{font-weight:600}
+.pcard:hover,.lockcell:hover{border-color:var(--teal)}
+.pcard.sel,.lockcell.sel{border-color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal)}
+.chip.cur{border-color:var(--teal)}
+.optrow{background:var(--band)}
+/* colours hard-coded inside markup the page builds */
+[style*="#fbf7ea"]{background:var(--warn-bg)!important;border-color:var(--warn-ln)!important;color:var(--ink)}
+[style*="#0a6e57"]{color:var(--ok-tx)!important}
+[style*="var(--accent)"]{color:var(--orange)!important}
 </style>
 <!-- Google tag (gtag.js) — same property as phoenixlabconsulting.com -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z6ZYQFCWT2"></script>

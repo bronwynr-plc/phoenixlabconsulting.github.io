@@ -41,6 +41,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
 
+<script>try{var t=localStorage.getItem("plc-theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 <style>
 :root{
   --ink:#111111; --paper:#FCFCFB; --sub:#5A5652; --faint:#8E8981;
@@ -58,6 +59,12 @@
     --orange:#D8501C; --mark:#F2F0EC; --hover:rgba(216,80,28,.07);
     --teal:#50A2A7; --band:#151210; --gold:#4C3D3B;
   }
+}
+:root[data-theme="dark"]{
+  --ink:#F2F0EC; --paper:#0E0E0D; --sub:#A8A29A; --faint:#7C766E;
+  --rule:#2E2B27; --rule-lt:#232120; --field:#171614;
+  --orange:#D8501C; --mark:#F2F0EC; --hover:rgba(216,80,28,.07);
+  --teal:#50A2A7; --band:#151210; --gold:#4C3D3B;
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
